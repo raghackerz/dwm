@@ -11,22 +11,58 @@ static const char *fonts[]          = {
   "Iosevka:weight=medium:size=20:style=Bold:antialias=true:hinting=true"
 };
 static const char dmenufont[]       = "monospace:size=10";
-static const char col_gray1[]       = "#222222";
+static const char col_gray1[]       = "#1a1b26";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
-static const unsigned int baralpha = 0xd0;
+static const char col_bordercolor[] = "#b30000";
+static const char col1[]            = "#7aa2f7";   //kernel script(0c) blue
+static const char col2[]            = "#e0af68";   //cpu prcentage(0d) yellow
+static const char col3[]            = "#7dcfff";   //cputemp(0e)       
+static const char col4[]            = "#bb9af7";   //disku(0f)         purple
+static const char col5[]            = "#f7768e";   //memory(10)        red
+static const char col6[]            = "#646464";   //disabled(11)      grey
+static const char col7[]            = "#81a1c1";   //charger(12)      
+static const char col8[]            = "#0bfab0";   //volume(13)        greenblue
+static const char col9[]            = "#46d9ff";   //calendar(14)      lightblue
+static const char col10[]           = "#9ece6a";   //battery(15)       green
+// static const unsigned int baralpha = 0xd0;
+static const unsigned int baralpha = OPAQUE;
 static const unsigned int borderalpha = OPAQUE;
+
+enum { SchemeNorm, SchemeCol1, SchemeCol2, SchemeCol3, SchemeCol4,
+       SchemeCol5, SchemeCol6, SchemeCol7, SchemeCol8, SchemeCol9,SchemeCol10,SchemeSel }; /* color schemes */
+
 static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  "#b30000"  },
+	/*                fg         bg         border   */
+	[SchemeNorm]  = { col_gray3, col_gray1, col_gray2 },
+	[SchemeCol1]  = { col1,      col_gray1, col_gray2 },
+	[SchemeCol2]  = { col2,      col_gray1, col_gray2 },
+	[SchemeCol3]  = { col3,      col_gray1, col_gray2 },
+	[SchemeCol4]  = { col4,      col_gray1, col_gray2 },
+	[SchemeCol5]  = { col5,      col_gray1, col_gray2 },
+	[SchemeCol6]  = { col6,      col_gray1, col_gray2 },
+	[SchemeCol7]  = { col7,      col_gray1, col_gray2 },
+	[SchemeCol8]  = { col8,      col_gray1, col_gray2 },
+	[SchemeCol9]  = { col9,      col_gray1, col_gray2 },
+	[SchemeCol10] = { col10,     col_gray1, col_gray2 },
+	[SchemeSel]   = { col_gray4, col_cyan,  col_bordercolor  },
 };
 static const unsigned int alphas[][3]      = {
-	/*               fg      bg        border     */
-	[SchemeNorm] = { OPAQUE, baralpha, borderalpha },
-	[SchemeSel]  = { OPAQUE, baralpha, borderalpha },
+	/*                fg      bg        border     */
+	[SchemeNorm]  = { OPAQUE, baralpha, borderalpha },
+	[SchemeSel]   = { OPAQUE, baralpha, borderalpha },
+	[SchemeCol1]  = { OPAQUE, baralpha, borderalpha},
+	[SchemeCol2]  = { OPAQUE, baralpha, borderalpha},
+	[SchemeCol3]  = { OPAQUE, baralpha, borderalpha},
+	[SchemeCol4]  = { OPAQUE, baralpha, borderalpha},
+	[SchemeCol5]  = { OPAQUE, baralpha, borderalpha},
+	[SchemeCol6]  = { OPAQUE, baralpha, borderalpha},
+	[SchemeCol7]  = { OPAQUE, baralpha, borderalpha},
+	[SchemeCol8]  = { OPAQUE, baralpha, borderalpha},
+	[SchemeCol9]  = { OPAQUE, baralpha, borderalpha},
+	[SchemeCol10] = { OPAQUE, baralpha, borderalpha},
 };
 
 /* tagging */
@@ -71,6 +107,9 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
+static const char *volinc[] = {"sigdwmblocks", "8", "1"};
+static const char *voldec[]= {"sigdwmblocks", "8", "2"};
+static const char *volmute[]= {"sigdwmblocks", "8", "3"};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -101,6 +140,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
 	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
+  {0,                             0x1008ff13,spawn,          {.v = volinc} },
+  {0,                             0x1008ff11,spawn,          {.v = voldec} },
+  {0,                             0x1008ff12,spawn,          {.v = volmute} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -121,7 +163,9 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
+	{ ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
+	{ ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
