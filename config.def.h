@@ -148,9 +148,13 @@ static Keychord keychords[] = {
   {1, {{0,                            0x1008ff11}},spawn,          {.v = voldec} },
   {1, {{0,                            0x1008ff12}},spawn,          {.v = volmute} },
   
-  {1, {{MODKEY|ShiftMask,             XK_x,}},     spawn,          SHCMD("/home/raghackerz/.scripts/shutdown") },
-  {1, {{MODKEY,                       XK_F8,}},    spawn,          SHCMD("/home/raghackerz/.scripts/keyboard") },
-  {1, {{0,                            XK_Print,}}, spawn,          SHCMD("/home/raghackerz/.scripts/screenshots") },
+  {1, {{MODKEY|ShiftMask,             XK_x}},     spawn,          SHCMD("/home/raghackerz/.scripts/shutdown") },
+  {1, {{MODKEY,                       XK_F8}},    spawn,          SHCMD("/home/raghackerz/.scripts/keyboard") },
+  {1, {{0,                            XK_Print}}, spawn,          SHCMD("/home/raghackerz/.scripts/screenshots") },
+
+  {3, {{MODKEY,XK_semicolon},{0,XK_w},{0,XK_s}},  spawn,          SHCMD("/home/raghackerz/.scripts/wallpaperselector") },
+  {3, {{MODKEY,XK_semicolon},{0,XK_w},{0,XK_r}},  spawn,          SHCMD("/home/raghackerz/.scripts/randomwallpaper") },
+  {2, {{MODKEY,XK_semicolon},{0,XK_i}},           spawn,          SHCMD("/home/raghackerz/.scripts/important") },
 	TAGKEYS(                            XK_1,                        0)
 	TAGKEYS(                            XK_2,                        1)
 	TAGKEYS(                            XK_3,                        2)
