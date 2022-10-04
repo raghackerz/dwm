@@ -110,12 +110,16 @@ static const char *termcmd[]  = { "st", NULL };
 static const char *volinc[] = {"sigdwmblocks", "8", "1"};
 static const char *voldec[]= {"sigdwmblocks", "8", "2"};
 static const char *volmute[]= {"sigdwmblocks", "8", "3"};
+static const char *browser[] = {"brave"};
+static const char *incognito_browser[] = {"brave","--incognito"};
 
 static Keychord keychords[] = {
 	/* modifier                         key          function        argument */
 	{1, {{MODKEY|ShiftMask,             XK_Return}}, spawn,          {.v = dmenucmd } },
 	{1, {{MODKEY,                       XK_Return}}, spawn,          {.v = termcmd } },
-	{1, {{MODKEY,                       XK_b}},      togglebar,      {0} },
+	{1, {{MODKEY,                       XK_b}},      spawn,          {.v = browser } },
+	{1, {{MODKEY|ShiftMask,             XK_b}},      spawn,          {.v = incognito_browser } },
+	{1, {{MODKEY,                       XK_s}},      togglebar,      {0} },
 	{1, {{MODKEY,                       XK_j}},      focusstack,     {.i = +1 } },
 	{1, {{MODKEY,                       XK_k}},      focusstack,     {.i = -1 } },
 	{1, {{MODKEY,                       XK_i}},      incnmaster,     {.i = +1 } },
@@ -126,11 +130,11 @@ static Keychord keychords[] = {
 	{1, {{MODKEY,                       XK_Tab}},    view,           {0} },
 	{1, {{MODKEY|ShiftMask,             XK_c}},      killclient,     {0} },
 	{1, {{MODKEY,                       XK_t}},      setlayout,      {.v = &layouts[0]} },
-	{1, {{MODKEY,                       XK_f}},      setlayout,      {.v = &layouts[1]} },
+	//{1, {{MODKEY,                       XK_f}},      setlayout,      {.v = &layouts[1]} },
 	{1, {{MODKEY,                       XK_m}},      setlayout,      {.v = &layouts[2]} },
 	{1, {{MODKEY,                       XK_space}},  setlayout,      {0} },
 	{1, {{MODKEY|ShiftMask,             XK_space}},  togglefloating, {0} },
-	{1, {{MODKEY|ShiftMask,             XK_f}},      togglefullscr,  {0} },
+	{1, {{MODKEY,                       XK_f}},      togglefullscr,  {0} },
 	{1, {{MODKEY,                       XK_0}},      view,           {.ui = ~0 } },
 	{1, {{MODKEY|ShiftMask,             XK_0}},      tag,            {.ui = ~0 } },
 	{1, {{MODKEY,                       XK_comma}},  focusmon,       {.i = -1 } },
@@ -143,6 +147,10 @@ static Keychord keychords[] = {
   {1, {{0,                            0x1008ff13}},spawn,          {.v = volinc} },
   {1, {{0,                            0x1008ff11}},spawn,          {.v = voldec} },
   {1, {{0,                            0x1008ff12}},spawn,          {.v = volmute} },
+  
+  {1, {{MODKEY|ShiftMask,             XK_x,}},     spawn,          SHCMD("/home/raghackerz/.scripts/shutdown") },
+  {1, {{MODKEY,                       XK_F8,}},    spawn,          SHCMD("/home/raghackerz/.scripts/keyboard") },
+  {1, {{0,                            XK_Print,}}, spawn,          SHCMD("/home/raghackerz/.scripts/screenshots") },
 	TAGKEYS(                            XK_1,                        0)
 	TAGKEYS(                            XK_2,                        1)
 	TAGKEYS(                            XK_3,                        2)
