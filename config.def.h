@@ -15,6 +15,7 @@ static const char col_gray1[]       = "#1a1b26";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
+static const char foreground[]      = "#c0caf5";
 static const char col_cyan[]        = "#005577";
 static const char col_bordercolor[] = "#b30000";
 static const char col1[]            = "#7aa2f7";   //kernel script(0c) blue
@@ -36,7 +37,7 @@ enum { SchemeNorm, SchemeCol1, SchemeCol2, SchemeCol3, SchemeCol4,
 
 static const char *colors[][3]      = {
 	/*                fg         bg         border   */
-	[SchemeNorm]  = { col_gray3, col_gray1, col_gray2 },
+	[SchemeNorm]  = { foreground,col_gray1, col_gray2 },
 	[SchemeCol1]  = { col1,      col_gray1, col_gray2 },
 	[SchemeCol2]  = { col2,      col_gray1, col_gray2 },
 	[SchemeCol3]  = { col3,      col_gray1, col_gray2 },
@@ -111,14 +112,14 @@ static const char *volinc[] = {"sigdwmblocks", "8", "1"};
 static const char *voldec[]= {"sigdwmblocks", "8", "2"};
 static const char *volmute[]= {"sigdwmblocks", "8", "3"};
 static const char *browser[] = {"brave"};
-static const char *incognito_browser[] = {"brave","--incognito"};
 
 static Keychord keychords[] = {
 	/* modifier                         key          function        argument */
 	{1, {{MODKEY|ShiftMask,             XK_Return}}, spawn,          {.v = dmenucmd } },
 	{1, {{MODKEY,                       XK_Return}}, spawn,          {.v = termcmd } },
 	{1, {{MODKEY,                       XK_b}},      spawn,          {.v = browser } },
-	{1, {{MODKEY|ShiftMask,             XK_b}},      spawn,          {.v = incognito_browser } },
+	//{1, {{MODKEY|ShiftMask,             XK_b}},      spawn,          {.v = incognito_browser } },
+	{1, {{MODKEY|ShiftMask,             XK_b}},      spawn,          SHCMD("brave --incognito") },
 	{1, {{MODKEY,                       XK_s}},      togglebar,      {0} },
 	{1, {{MODKEY,                       XK_j}},      focusstack,     {.i = +1 } },
 	{1, {{MODKEY,                       XK_k}},      focusstack,     {.i = -1 } },
